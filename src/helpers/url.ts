@@ -12,7 +12,6 @@ function encode(val:string):string {
 }
 
 export function buildURL(url:string,params?:any):string {
-  console.log()
   if(!params){
     return url
   }
