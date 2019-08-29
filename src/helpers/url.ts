@@ -23,13 +23,13 @@ export function buildURL(url:string,params?:any):string {
       return
     }
     let values = [];
-    if(Array.isArray(val)){
+    if(Array.isArray(val)){ // 如果val为数组，在key后增加[]，如 a[]=1&a[]=2
       values = val;
       key += '[]'
     }else{
       values = [val]
     }
-    values.forEach((val)=>{
+    values.forEach((val)=>{ // val为日期，特殊处理
       if(isDate(val)){
         val = val.toISOString()
       }else if(isPlainObject(val)){
@@ -39,13 +39,13 @@ export function buildURL(url:string,params?:any):string {
     })
   });
 
-  let serializedParams = parts.join('&');
+  let serializedParams = parts.join('&'); // 参数间加入&
   if(serializedParams){
     const markIndex = url.indexOf('#');
     if(markIndex!==-1){
       url = url.slice(0,markIndex)
-    }
-    url += (url.indexOf('?')===-1?"?":'&')+serializedParams
+    } // 截取#之前
+    url += (url.indexOf('?')===-1?"?":'&')+serializedParams // url没有?就加?，有就加&
   }
   return url
 }

@@ -1,6 +1,6 @@
-import {AxiosRequestConfig, AxiosPromise, AxiosResponse} from './types';
-import {parseHeaders} from './helpers/headers'
-import {createError} from "./helpers/error";
+import {AxiosRequestConfig, AxiosPromise, AxiosResponse} from '../types';
+import {parseHeaders} from '../helpers/headers'
+import {createError} from "../helpers/error";
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -15,7 +15,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       request.timeout = timeout
     }
 
-    request.open(method.toUpperCase(), url, true);
+    request.open(method.toUpperCase(), url!, true);
 
 
     request.onreadystatechange = function handleLoad() {
@@ -27,7 +27,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         return
       }
 
-      const responseHeaders = parseHeaders(request.getAllResponseHeaders());
+      const responseHeaders = parseHeaders(request.getAllResponseHeaders()); // 处理response的Headers
       const responseData = responseType !== 'text' ? request.response : request.responseText;
       const response: AxiosResponse = {
         data: responseData,
@@ -37,14 +37,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         config,
         request
       };
-      handleResponse(response);
+      handleResponse(response); // 处理结果，抛出错误
     };
 
-    request.onerror = function handleError() {
+    request.onerror = function handleError() { // 请求错误。
       reject(createError('Network Error',config,null,request))
     };
 
-    request.ontimeout = function handleTimeout() {
+    request.ontimeout = function handleTimeout() { // 超时
       reject(createError(`Timeout of ${timeout} ms exceeded`,config,'ECONNABORTED',request))
     };
 
@@ -54,7 +54,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       } else {
         request.setRequestHeader(name, headers[name])
       }
-    });
+    }); // 如果data为空，并且有content-type就去了，不然就键值对添加
     request.send(data);
 
     function handleResponse(response: AxiosResponse): void {

@@ -1,4 +1,5 @@
-import {isPlainObject} from "./util";
+import {deepMerge, isPlainObject} from "./util";
+import {Method} from "../types";
 
 function normalizeHeaderName(headers:any,normalizedName:string):void {
   if(!headers){
@@ -14,7 +15,7 @@ function normalizeHeaderName(headers:any,normalizedName:string):void {
 
 export function processHeaders(headers:any,data:any):any {
   normalizeHeaderName(headers,'Content-Type');
-  if(isPlainObject(data)){
+  if(isPlainObject(data)){ // 如果data是对象，并且没有headers中没有Content-Type，
     if(headers&&!headers['Content-Type']){
       headers['Content-Type'] = 'application/json;charset=utf-8'
     }
@@ -22,7 +23,7 @@ export function processHeaders(headers:any,data:any):any {
   return headers
 }
 
-export function parseHeaders(headers:string):any {
+export function parseHeaders(headers:string):any { // 处理headers，将规则的字符串转为对象
   let parsed = Object.create(null);
   if(!headers){
     return parsed
@@ -40,4 +41,19 @@ export function parseHeaders(headers:string):any {
     parsed[key] = val
   });
   return parsed
+}
+
+export function flattenHeaders(headers:any,method:Method):any {
+  if(!headers){
+    return headers
+  }
+
+  headers = deepMerge(headers.common,headers[method],headers); // 深拷贝headers.common,headers[Method](请求方法)的方法,和传入headers里的方法
+
+  const methodsToDelete = ['delete','get','head','options','post','put','patch','common']; // 删除不必要的属性
+
+  methodsToDelete.forEach(method => {
+    delete headers[method]
+  });
+  return headers
 }
