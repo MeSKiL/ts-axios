@@ -4,7 +4,7 @@ import {createError} from "../helpers/error";
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const {data = null, url, method = 'get', headers, responseType, timeout} = config;
+    const {data = null, url, method = 'get', headers, responseType, timeout,cancelToken} = config;
     const request = new XMLHttpRequest();
 
     if (responseType) {
@@ -55,6 +55,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.setRequestHeader(name, headers[name])
       }
     }); // 如果data为空，并且有content-type就去了，不然就键值对添加
+
+    if(cancelToken){
+      cancelToken.promise.then(reason => { // 如果cancelToken的promise状态变为resolve，就取消请求 promise实现异步分离
+        request.abort();
+        reject(reason);
+      })
+    }
     request.send(data);
 
     function handleResponse(response: AxiosResponse): void {

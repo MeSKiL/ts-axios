@@ -14,6 +14,7 @@ interface PromiseChain<T>{ // 拦截器链
 }
 
 export default class Axios{ // 暴露出去的类
+
   defaults:AxiosRequestConfig; // config默认值
 
   interceptors:Interceptors; // 拦截器
