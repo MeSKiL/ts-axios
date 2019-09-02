@@ -1,5 +1,10 @@
 import {isDate,isPlainObject} from './util'
 
+interface URLOrigin {
+  protocol:string
+  host:string
+}
+
 function encode(val:string):string {
   return encodeURIComponent(val)
     .replace(/%40/g,'@')
@@ -48,4 +53,20 @@ export function buildURL(url:string,params?:any):string {
     url += (url.indexOf('?')===-1?"?":'&')+serializedParams // url没有?就加?，有就加&
   }
   return url
+}
+
+export function isURLSameOrigin(requestURL:string):boolean { // 判断是否同源同策略
+  const parsedOrigin = resolveURL(requestURL); // 得到传入参数的域名和策略
+  return (parsedOrigin.protocol===currentOrigin.protocol&&parsedOrigin.host===currentOrigin.host)
+}
+
+const urlParsingNode = document.createElement('a');
+const currentOrigin = resolveURL(window.location.href);
+
+function resolveURL(url:string):URLOrigin { // 用创建一个a节点可以获取url信息的方法得到传入参数的域名和策略
+  urlParsingNode.setAttribute('href',url);
+  const {protocol,host} = urlParsingNode;
+  return {
+    protocol,host
+  }
 }

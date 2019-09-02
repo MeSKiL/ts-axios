@@ -1,10 +1,22 @@
 import {AxiosRequestConfig, AxiosPromise, AxiosResponse} from '../types';
 import {parseHeaders} from '../helpers/headers'
 import {createError} from "../helpers/error";
+import {isURLSameOrigin} from "../helpers/url";
+import cookie from '../helpers/cookie'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const {data = null, url, method = 'get', headers, responseType, timeout,cancelToken} = config;
+    const {
+      data = null,
+      url,
+      method = 'get',
+      headers,
+      responseType,
+      timeout,
+      cancelToken,
+      withCredentials,
+      xsrfCookieName,
+      xsrfHeaderName} = config;
     const request = new XMLHttpRequest();
 
     if (responseType) {
@@ -13,6 +25,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     if (timeout) {
       request.timeout = timeout
+    }
+
+    if(withCredentials){ // 如果config里的widthCredentials为true，request的withCredentials为true，跨域请求可以带上请求域的cookie
+      request.withCredentials = withCredentials
     }
 
     request.open(method.toUpperCase(), url!, true);
@@ -47,6 +63,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     request.ontimeout = function handleTimeout() { // 超时
       reject(createError(`Timeout of ${timeout} ms exceeded`,config,'ECONNABORTED',request))
     };
+
+    if((withCredentials||isURLSameOrigin(url!))&&xsrfCookieName){ // 如果withCredentials(允许跨域携带cookie),或者同源同策略
+      const xsrfValue = cookie.read(xsrfCookieName); // 从cookie中读取xsrfCookieName
+      if(xsrfValue && xsrfHeaderName){
+        headers[xsrfHeaderName] = xsrfValue // xsrfValue && xsrfHeaderName存在的话就赋值给 headers[xsrfHeaderName]
+      }
+    }
 
     Object.keys(headers).forEach((name) => {
       if (data === null && name.toLowerCase() === 'content-type') {
