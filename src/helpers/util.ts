@@ -12,6 +12,14 @@ export function isPlainObject(val: any): val is Object { // 是否为纯对象
   return toString.call(val) === '[object Object]'
 }
 
+export function isFormData(val:any):val is FormData { // 是否为FormData类型
+  return typeof val !== 'undefined' && val instanceof FormData
+}
+
+export function isURLSearchParams(val:any):val is URLSearchParams { // 是否为URLSearchParams
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
+}
+
 export function extend<T, U>(to: T, from: U): T & U {
   for (const key in from) {
     (to as T & U)[key] = from[key] as any

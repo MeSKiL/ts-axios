@@ -1,10 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+const multipart = require('connect-multiparty');
+const atob = require('atob')
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const WebpackConfig = require('./webpack.config');
+
+const path = require('path')
 
 const app = express();
 const compiler = webpack(WebpackConfig);
@@ -30,6 +34,10 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser())
+
+app.use(multipart({
+  uploadDir:path.resolve(__dirname,'upload-file')
+}))
 
 const router = express.Router();
 
@@ -186,7 +194,7 @@ function registerMoreRouter () {
     const [type, credentials] = auth.split(' ')
     console.log(atob(credentials))
     const [username, password] = atob(credentials).split(':')
-    if (type === 'Basic' && username === 'Yee' && password === '123456') {
+    if (type === 'Basic' && username === 'cy' && password === '123456') {
       res.json(req.body)
     } else {
       res.status(401)

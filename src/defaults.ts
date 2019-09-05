@@ -26,6 +26,10 @@ const defaults:AxiosRequestConfig = {
       return transformResponse(data) // 默认处理response的data
     }
   ],
+
+  validateStatus(status:number):boolean{
+    return status>=200&&status<300
+  }
 };// 定义默认值
 
 

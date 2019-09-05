@@ -33,9 +33,9 @@ stratkeysFromVal2.forEach(key => {
   strats[key] = fromVal2Strat // url,params,data只采用val2
 });
 
-const stratKeysDeepMerge = ['headers'];
+const stratKeysDeepMerge = ['headers','auth'];
 stratKeysDeepMerge.forEach(key => {
-  strats[key] = deepMergeStrat // headers进行深拷贝
+  strats[key] = deepMergeStrat // headers和auth进行深拷贝
 });
 
 export default function mergeConfig(config1: AxiosRequestConfig, config2?: AxiosRequestConfig): AxiosRequestConfig {
