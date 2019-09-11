@@ -20,7 +20,7 @@ export function isURLSearchParams(val:any):val is URLSearchParams { // 是否为
   return typeof val !== 'undefined' && val instanceof URLSearchParams
 }
 
-export function extend<T, U>(to: T, from: U): T & U {
+export function extend<T, U>(to: T, from: U): T & U { // 将from上的属性放到to上
   for (const key in from) {
     (to as T & U)[key] = from[key] as any
   }
@@ -36,8 +36,9 @@ export function deepMerge(...objs:any[]):any { // 深拷贝具体方法
         if(isPlainObject(val)){
           if(isPlainObject(result[key])){
             result[key] = deepMerge(result[key],val)
+          }else{
+            result[key] = deepMerge(val)
           }
-          result[key] = deepMerge(val)
         }else{
           result[key] = val
         }

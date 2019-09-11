@@ -67,7 +67,7 @@ export function buildURL(url:string,params?:any,paramsSerializer?:(params:any)=>
 }
 
 export function isAbsoluteURL(url:string):boolean{ // 是否为绝对地址
-  return /(^[a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
 }
 
 export function combineURL(baseURL:string,relativeURL?:string):string { // 拼接两个URL，防止写的不规范

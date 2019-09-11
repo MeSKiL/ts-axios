@@ -8,7 +8,8 @@ export function transformRequest(data: any): any {
 }
 
 export function transformResponse(data: any): any {
-  if (typeof data === 'string') { // 如果是string就尝试转对象，转不了就直接返回
+  if (typeof data === 'string') {
+    // 如果是string就尝试转对象，转不了就直接返回
     try {
       data = JSON.parse(data)
     } catch (e) {
