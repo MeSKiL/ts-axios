@@ -121,6 +121,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         cancelToken.promise.then(reason => { // 如果cancelToken的promise状态变为resolve，就取消请求 promise实现异步分离
           request.abort();
           reject(reason);
+        }).catch(
+          /* istanbul ignore next */
+          ()=>{
+          // do nothing
         })
       }
       request.send(data);

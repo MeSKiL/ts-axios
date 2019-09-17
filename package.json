@@ -1,5 +1,5 @@
 {
-  "name": "ts-axios",
+  "name": "meskil-ts-axios",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
@@ -12,7 +12,7 @@
   "author": "MeSKiL <403797970@qq.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/MeSKiL/ts-axios.git"
   },
   "license": "MIT",
   "engines": {
@@ -33,7 +33,9 @@
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "prepub": "npm run test:prod && npm run build",
+    "pub": "sh release.sh"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
