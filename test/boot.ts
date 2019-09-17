@@ -1,6 +1,7 @@
-describe('helpers:cookie',()=>{
-  test('should read cookies',()=>{
-    let a = 1;
-    expect(a).toBe(1);
-  })
-});
+const JasmineCore = require('jasmine-core');
+// @ts-ignore
+global.getJasmineRequireObj = function() {
+  return JasmineCore
+}
+
+require('jasmine-ajax')

@@ -38,6 +38,7 @@ export default class Axios{ // 暴露出去的类
       config = url
     }
     config = mergeConfig(this.defaults,config); // 合并默认与传入配置
+    config.method = config.method.toLowerCase(); // 强制把请求方法转成小写
 
     const chain:PromiseChain<any>[] = [{
       resolved:dispatchRequest, // 具体实现请求的方法
