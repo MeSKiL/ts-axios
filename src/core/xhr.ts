@@ -10,7 +10,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     const {
       data = null,
       url,
-      method = 'get',
+      method,
       headers = {},
       responseType,
       timeout,
@@ -25,7 +25,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     } = config;
     const request = new XMLHttpRequest();
 
-    request.open(method.toUpperCase(), url!, true);
+    request.open(method!.toUpperCase(), url!, true);
 
     configureRequest();
 
@@ -61,7 +61,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         }
 
         const responseHeaders = parseHeaders(request.getAllResponseHeaders()); // 处理response的Headers
-        const responseData = responseType !== 'text' ? request.response : request.responseText;
+        const responseData = responseType && responseType !== 'text' ? request.response : request.responseText;
         const response: AxiosResponse = {
           data: responseData,
           status: request.status,
